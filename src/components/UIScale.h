@@ -14,7 +14,8 @@ struct UIScaleSpec {
 inline UIScaleSpec uiScaleSpec() {
   UIScaleSpec spec{};
   spec.smallFontId = UI_10_FONT_ID;
-  spec.bodyFontId = UI_12_FONT_ID;
+  // UI_10_FONT_ID is the multilingual Helvetica 9pt strike.
+  spec.bodyFontId = UI_10_FONT_ID;
   // Titles use the UI font, not a reader font: fui headers draw book and
   // directory titles, and the built-in Ubuntu UI fonts cover Hebrew (plus the
   // size-matched SD CJK fallback) where the NotoSans reader subsets do not.

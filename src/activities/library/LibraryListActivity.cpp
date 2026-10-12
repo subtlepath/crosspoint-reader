@@ -74,8 +74,7 @@ const char* tabLabelFor(const int tab) {
   return tr(STR_LIBRARY_TAB_RECENT);
 }
 
-// Home sets its type a step under the theme's: the body slot draws names in
-// the 20px strike and the small slot details in the 17px one. The slots are
+// Home uses the 9pt UI strike for names and the 8pt strike for details. The slots are
 // rebound only while Home builds its screen (FreeInkUI draws as it builds), so
 // the shared theme tokens keep deriving from the theme's own body font.
 class HomeTypeScale {

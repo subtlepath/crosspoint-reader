@@ -532,10 +532,21 @@ Rect BaseTheme::drawPopup(const GfxRenderer& renderer, const char* message) cons
   const EpdFontFamily::Style popupFontFamily = metrics.popupTextBold ? EpdFontFamily::BOLD : EpdFontFamily::REGULAR;
   // Scale y position proportionally to screen height
   const int y = static_cast<int>(renderer.getScreenHeight() * metrics.popupTopOffsetRatio);
-  const int textWidth = renderer.getTextWidth(UI_12_FONT_ID, message, popupFontFamily);
-  const int textHeight = renderer.getLineHeight(UI_12_FONT_ID);
+  int marginTop, marginRight, marginBottom, marginLeft;
+  renderer.getOrientedViewableTRBL(&marginTop, &marginRight, &marginBottom, &marginLeft);
+  // Centered on the screen, so the wider bezel margin bounds both sides.
+  const int maxTextWidth =
+      renderer.getScreenWidth() -
+      (std::max(marginLeft, marginRight) + metrics.contentSidePadding + frameThickness + marginX) * 2;
+  static constexpr int MAX_POPUP_LINES = 4;
+  const auto lines = renderer.wrappedText(UI_12_FONT_ID, message, maxTextWidth, MAX_POPUP_LINES, popupFontFamily);
+  int textWidth = 0;
+  for (const auto& line : lines) {
+    textWidth = std::max(textWidth, renderer.getTextWidth(UI_12_FONT_ID, line.c_str(), popupFontFamily));
+  }
+  const int lineHeight = renderer.getLineHeight(UI_12_FONT_ID);
   const int w = textWidth + marginX * 2;
-  const int h = textHeight + marginY * 2;
+  const int h = lineHeight * std::max(1, static_cast<int>(lines.size())) + marginY * 2;
   const int x = (renderer.getScreenWidth() - w) / 2;
 
   const bool useRoundedPopup = metrics.popupCornerRadius > 0;
@@ -548,9 +559,13 @@ Rect BaseTheme::drawPopup(const GfxRenderer& renderer, const char* message) cons
     renderer.fillRect(x, y, w, h, false);
   }
 
-  const int textX = x + (w - textWidth) / 2;
-  const int textY = y + marginY + metrics.popupTextBaselineOffsetY;
-  renderer.drawText(UI_12_FONT_ID, textX, textY, message, metrics.popupTextInverted, popupFontFamily);
+  int textY = y + marginY + metrics.popupTextBaselineOffsetY;
+  for (const auto& line : lines) {
+    const int lineWidth = renderer.getTextWidth(UI_12_FONT_ID, line.c_str(), popupFontFamily);
+    renderer.drawText(UI_12_FONT_ID, x + (w - lineWidth) / 2, textY, line.c_str(), metrics.popupTextInverted,
+                      popupFontFamily);
+    textY += lineHeight;
+  }
   renderer.displayBuffer();
   return Rect{x, y, w, h};
 }

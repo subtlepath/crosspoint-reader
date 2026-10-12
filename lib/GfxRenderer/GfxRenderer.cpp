@@ -1833,6 +1833,7 @@ std::vector<std::string> GfxRenderer::wrappedText(const int fontId, const char* 
 
   if (!text || maxWidth <= 0 || maxLines <= 0) return lines;
 
+  lines.reserve(maxLines);
   std::string remaining = text;
   std::string currentLine;
 
