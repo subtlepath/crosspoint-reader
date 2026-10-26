@@ -1,14 +1,10 @@
-<p align="center"><img src="src/images/Logo120.png" width="120" alt="lila, a small black pug"></p>
-
-# lila
-
 **An opinionated fork of [CrossPoint Reader](https://github.com/crosspoint-reader/crosspoint-reader)** for Xteink e-readers.
 
-Named for Lila, a very small black pug who was a little awkward, and perfect.
+This fork is deprecated in favor of [lila.app](https://subtlepath.com/lila), a custom firmware with much better performance and a macOS companion app for updating device firmware and managing book libraries.
 
 ## What makes lila opinionated
 
-CrossPoint gives you a lot of controls. lila picks the defaults and designs around them, so the device feels finished
+CrossPoint gives you a lot of controls. This fork picks the defaults and designs around them, so the device feels finished
 rather than configurable.
 
 - **Every book opens to a page someone has carefully designed.** Leading, measure, justification, hyphenation and
